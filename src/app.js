@@ -22,6 +22,14 @@ const itemCompras = [
 
 app.get("/feirinha", (req, res) => {
 
+    const { type } = req.query;
+
+    if (type) {
+        const typeItem = itemCompras.filter(item => {
+            return item.type.toLocaleLowerCase().includes(type.toLocaleLowerCase());
+        })
+        return res.send(typeItem);
+    };
     res.send(itemCompras);
 
 })
@@ -31,6 +39,12 @@ app.get("/feirinha/:id", (req, res) => {
     const buscarItem = itemCompras.find(item => {
         return item.id == Number(id);
     })
+   if (id < 1 ) {
+        return res.status(400).send("Esse id não existe!!")
+    }
+    if ( id > itemCompras.length) {
+        return res.status(404).send("Esse id não existe!!")
+    }
     res.send(buscarItem);
 });
 
